@@ -8,25 +8,25 @@ Please do not forget to update the changelog when uploading a new version.
 
 Connection Guide:
 
- Port1: 
+ Port1: Rear Left Drive
  
- Port2: Rear Left Drive
+ Port2: Rear Right Drive
  
- Port3: Rear Right Drive
+ Port3: Intake Motor
  
- Port4: 
+ Port4: Firing Motors (Splitter + Power Expander)
  
- Port5: Front Left Drive
+ Port5: 
  
- Port6: Front Right Drive
+ Port6: 
  
  Port7: 
  
  Port8: 
  
- Port9: 
+ Port9: Front Right Drive
  
-Port10: Intake Motor
+Port10: Front Left Drive
 
 .
 .
@@ -40,3 +40,7 @@ v0.1.0
 +Added Drivetrain Control
 
 +Added intake Control
+
+v0.1.1
+
+=Updated Motor configuration
