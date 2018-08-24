@@ -1,8 +1,8 @@
-BotCode-Latest contains the code intended for the Feature Development Robot (R1)
+BotCode-Stable contains the code intended for robots other than the Feature Development Robot
 
-Do not use this code for robots other than this robot.
+Use this code for robots other than this robot.
 
-For all other robots, pull the code file from Botcode-Stable. These compiles are ready for the exported versions.
+Do not forget to upload a new version each time you make a change, however small.
 
 Please do not forget to update the changelog when uploading a new version.
 
@@ -38,8 +38,6 @@ CHANGELOG
 v0.1.0
 
 +Added Drivetrain Control
-
-+Added intake Control
 
 v0.1.1
 
