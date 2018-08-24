@@ -16,15 +16,15 @@ Connection Guide:
  
  Port4: Intake Motor
  
- Port5: Firing Motors (Splitterx2 + Power Expander) 
+ Port5: Front Left Drive  
  
- Port6: LiftMotor1
+ Port6: Front Right Drive
  
  Port7: ClawMotor
  
- Port8: Front Right Drive
+ Port8: Firing Motors (Splitterx2 + Power Expander) 
  
- Port9: Front Left Drive 
+ Port9: LiftMotor1
  
 Port10: Platform Boost system (?)
 
