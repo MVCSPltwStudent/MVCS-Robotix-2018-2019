@@ -8,25 +8,25 @@ Please do not forget to update the changelog when uploading a new version.
 
 Connection Guide:
 
- Port1: Rear Left Drive
+ Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
  
- Port2: Rear Right Drive
+ Port2: Rear Left Drive
  
- Port3: Intake Motor
+ Port3: Rear Right Drive
  
- Port4: Firing Motors (Splitter + Power Expander)
+ Port4: Intake Motor
  
- Port5: 
+ Port5: Firing Motors (Splitterx2 + Power Expander) 
  
- Port6: 
+ Port6: LiftMotor1
  
- Port7: 
+ Port7: ClawMotor
  
- Port8: 
+ Port8: Front Right Drive
  
- Port9: Front Right Drive
+ Port9: Front Left Drive 
  
-Port10: Front Left Drive
+Port10: Platform Boost system (?)
 
 .
 .
