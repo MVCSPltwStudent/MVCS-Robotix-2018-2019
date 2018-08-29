@@ -6,6 +6,8 @@ For all other robots, pull the code file from Botcode-Stable. These compiles are
 
 Please do not forget to update the changelog when uploading a new version.
 
+IMPORTANT: THE FRONT OF THE ROBOT IS THE INTAKE SIDE.
+
 Connection Guide:
 
  Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
