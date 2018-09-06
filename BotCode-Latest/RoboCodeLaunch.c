@@ -37,9 +37,6 @@
 
 void pre_auton()
 {
-  // Set bStopTasksBetweenModes to false if you want to keep user created tasks
-  // running between Autonomous and Driver controlled modes. You will need to
-  // manage all user created tasks if set to false.
   bStopTasksBetweenModes = true;
 
 	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD

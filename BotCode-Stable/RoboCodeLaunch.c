@@ -23,7 +23,7 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 
-#include "RoboCode-Stable v0.2.1.c"
+#include "RoboCode-Stable v0.2.2.c"
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
