@@ -32,7 +32,6 @@ Port10: Platform Boost system (?)
 //-----------------------------------------------IMPORTANT---------------------------------------------
 
 //Config
-const int spinUpTimeInMS = 1000;
 
 //Internal Use Variables
 int FR;
@@ -86,47 +85,21 @@ task flywheelToggle(){ //detects button presses to toggle the flywheel
 				wait1Msec(1);
 			}
 		}
-		if(FireReady){
-			turnLEDOn(LED);
+		if(flywheelRunning){ // if flywheel set to be on
+			motor[mFRE] = 127; //turn on
+			motor[port9] = 127;
 		}else{
-			turnLEDOff(LED);
+			motor[mFRE] = 0; //else turn off
+			motor[port9] = 0;
 		}
-		EndTimeSlice(); //tell taks handler done
-	}
-}
-task flywheelHandler(){ //handles flywheel running
-	while(true){
-		if(!flywheelRunning){ //if the flywheel is set to be off
-			motor[mFRE] = 0;		//turn it off
-			FireReady = false;	//tell everythign else that its not ready to fire
-		}else if (!FireReady){ //if flywheel is on but the boolean says its not ready to fire (too slow)
-			motor[mFRE] = 127;		// start the motor
-			for(int a = 0; a < (spinUpTimeInMS/10);a++){ //give it a predetermined spin up time (todo: add encoders and make closed loop
-				if(!flywheelRunning){ //check if flywheel turned off while spinning up
-					break; //if turned off leave function
-				}
-				wait1Msec(10); //10 mS delay
-			}
-			FireReady = true; //tell cortex ready to fire (if loop exited early it will revert to false on next iteration)
-		} else {
-			motor[mFRE] = 127; //if ready to fire and flywheel is on keep motor running
-		}
-		EndTimeSlice();	//tell task handler is done
+		EndTimeSlice(); //tell task handler done
 	}
 }
 
-task temp(){
-	while(true){
-		motor[port9] = motor[port8];
-		EndTimeSlice();
-	}
-}
 void Start()
 {
 	startTask(drivetrain);
 	startTask(ballGrabber);
 	flywheelRunning = false;
 	startTask(flywheelToggle);
-	startTask(flywheelHandler);
-	startTask(temp);
 }

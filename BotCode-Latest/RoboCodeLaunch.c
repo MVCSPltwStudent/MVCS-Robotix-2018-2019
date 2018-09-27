@@ -1,4 +1,5 @@
 #pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
+#pragma config(Sensor, dgtl2,  LED1,           sensorLEDtoVCC)
 #pragma config(Motor,  port1,           mLFT2,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           mBR,           tmotorVex393_MC29, openLoop)
