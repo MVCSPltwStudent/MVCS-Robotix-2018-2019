@@ -1,4 +1,4 @@
-//RoboCode-Alpha v0.1.2
+//RoboCode-Alpha v0.1.3
 
 #pragma config(Motor,  port1,           mLFT2,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop)
@@ -15,23 +15,23 @@
 
 /*
  Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
- 
+
  Port2: Rear Left Drive
- 
+
  Port3: Rear Right Drive
- 
+
  Port4: Intake Motor
- 
- Port5: Front Left Drive  
- 
+
+ Port5: Front Left Drive
+
  Port6: Front Right Drive
- 
+
  Port7: ClawMotor
- 
- Port8: Firing Motors (Splitterx2 + Power Expander) 
- 
+
+ Port8: Firing Motors (Splitterx2 + Power Expander)
+
  Port9: LiftMotor1
- 
+
 Port10: Platform Boost system (?)
 
 */
@@ -68,7 +68,7 @@ task ballGrabber(){ //Ball intake system code
 }
 
 
-task main()
+void Start()
 {
 startTask(drivetrain);
 startTask(ballGrabber);
