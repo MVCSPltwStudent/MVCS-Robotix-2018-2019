@@ -1,4 +1,4 @@
-#pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
+#pragma config(Sensor, dgtl3,  LED,            sensorLEDtoVCC)
 #pragma config(Sensor, dgtl2,  LED1,           sensorLEDtoVCC)
 #pragma config(Motor,  port1,           mLFT2,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop)
@@ -27,7 +27,7 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 
-#include "RoboCode-Latest v0.4.0.c"
+#include "RoboCode-Latest v0.5.0.c"
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
