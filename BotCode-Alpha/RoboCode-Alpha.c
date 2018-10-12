@@ -1,6 +1,4 @@
-//RoboCode-Alpha v0.3.0
-
-
+//RoboCode-Alpha v0.3.1
 
 /*
 Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
@@ -48,7 +46,7 @@ int mabs (int a) {
 	return a < 0 ? -a : a;
 }
 
-task drivetrain(){ //Drivetrain Task.
+task drivetrain(){ //Drivetrain Task. Joshua's code.
 	while(true){
 		FR=(-vexRT[Ch4]+vexRT[Ch3])-vexRT[Ch1]; //Determines motor speeds. Joshua's Code.
 		FL=(-vexRT[Ch4]-vexRT[Ch3])-vexRT[Ch1];
