@@ -56,19 +56,16 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 		if(mabs(vexRT[Ch4]) < 20 && mabs(vexRT[Ch3]) < 20 && mabs(vexRT[Ch1]) < 30){ //Checks if joystick is in deadzone
 			FR = FL = BR = BL = 0;																									//if so, sets motor speeds to 0
 		}
-		if(halfSpeed){
+		if(sqrt((vexRT[Ch4]^2)+(vexRT[Ch3]^2))<127){
 			FR = FR/2;
 			FL = FL/2;
 			BR = BR/2;
 			BL = BL/2;
-			turnLEDOn(LED);
-		} else {
-			turnLEDOff(LED);
 		}
-		motor[mFR] = FR;  //Applies Motor Speeds
-		motor[mFL] = FL;
-		motor[mBR] = BR;
-		motor[mBL] = BL;
+			motor[mFR] = FR;  //Applies Motor Speeds
+			motor[mFL] = FL;
+			motor[mBR] = BR;
+			motor[mBL] = BL;
 
 		EndTimeSlice(); //tells task handler is done
 	}
@@ -126,3 +123,5 @@ void Start()
 	startTask(flywheelToggle);
 	startTask(speedToggle);
 }
+
+sqrt((vexRT[Ch4]^2)+(vexRT[Ch3]^2))
