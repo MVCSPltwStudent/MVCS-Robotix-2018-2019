@@ -64,7 +64,10 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 			FL = FL / 2;
 			BR = BR / 2;
 			BL = BL / 2;
-		}
+			turnLEDOn(LED);
+		} else {
+		turnLEDOff(LED);
+	}
 			motor[mFR] = FR;  //Applies Motor Speeds
 			motor[mFL] = FL;
 			motor[mBR] = BR;
