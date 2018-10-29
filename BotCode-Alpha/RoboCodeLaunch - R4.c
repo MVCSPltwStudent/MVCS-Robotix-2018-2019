@@ -27,7 +27,7 @@ const int lv1 = 50;
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 
-#include "RoboCode-Alpha.c"
+#include "RoboCode-Alpha.h"
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
