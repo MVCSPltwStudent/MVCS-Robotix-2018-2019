@@ -61,7 +61,7 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 		if (mabs(vexRT[Ch4]) < 20 && mabs(vexRT[Ch3]) < 20 && mabs(vexRT[Ch1]) < 30){ //Checks if joystick is in deadzone
 			FR = FL = BR = BL = 0;																									//if so, sets motor speeds to 0
 		}
-		if(sqrt((vexRT[Ch4]^2) + (vexRT[Ch3]^2)) < 	127){
+		if(sqrt((vexRT[Ch4]^2) + (vexRT[Ch3]^2)) < 127){
 			FR = FR / 2;
 			FL = FL / 2;
 			BR = BR / 2;
