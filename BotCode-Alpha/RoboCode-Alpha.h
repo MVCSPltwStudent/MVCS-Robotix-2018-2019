@@ -59,7 +59,7 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 		if (mabs(vexRT[Ch4]) < 20 && mabs(vexRT[Ch3]) < 20 && mabs(vexRT[Ch1]) < 30){ //Checks if joystick is in deadzone
 			FR = FL = BR = BL = 0;																									//if so, sets motor speeds to 0
 		}
-		if(sqrt((vexRT[Ch4]^2) + (vexRT[Ch3]^2)) < 110){
+		if(sqrt((vexRT[Ch4]*vexRT[Ch4]) + (vexRT[Ch3]*vexRT[Ch3])) < 120){
 			FR = FR/2;
 			FL = FL/2;
 			BR = BR/2;
@@ -123,7 +123,7 @@ task flywheelToggle() { //detects button presses to toggle the flywheel
 
 task flySpeedAdjuster() {
 	if (vexRT[Btn8L]) {
-		 while(!vexRT[Btn8L]){wait1Msec(1);}
+		 while(vexRT[Btn8L]){wait1Msec(1);}
 		 switch(flySpeed){
 		   case 254:
 		   	flySpeed = lv1;
