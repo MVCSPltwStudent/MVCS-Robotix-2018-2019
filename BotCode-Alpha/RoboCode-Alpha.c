@@ -46,8 +46,6 @@ bool halfSpeed = false;
 int flySpeed = 127;
 int flyModifier = 0;
 
-const int lv1 = 5, lv2 = 10, lv3 = 15;
-
 int mabs (int a) {
 	return a < 0 ? -a : a;
 }
@@ -124,22 +122,22 @@ task flySpeedAdjuster() {
 	if (vexRT[Btn8L]) {
 		 while(!vexRT[Btn8L]){wait1Msec(1);}
 		 switch(flySpeed){
-		   case 127:
+		   case 254:
 		   	flySpeed = lv1;
 		   break;
-
+/*
 		   case lv1:
 		   	flySpeed = lv2;
 		   break;
-
+*/ /*
 		   case lv2:
 		   	flySpeed = lv3;
 		   break;
-
+*/
 		   default:
-		   	flySpeed = 127;
+		   	flySpeed = 254;
 		  }
-	}
+	}/*
 	if (vexRT[Btn8R]) {
 		 while (!vexRT[Btn8R]){wait1Msec(1);}
 		 switch (flySpeed) {
@@ -158,7 +156,7 @@ task flySpeedAdjuster() {
 		   default:
 		   	flySpeed = 127;
 		  }
-	}
+	}*/
 	if (vexRT[Btn5U]) {
 		 while(!vexRT[Btn5U]){wait1Msec(1);}
 		  flyModifier++;
