@@ -1,4 +1,4 @@
-//Version 0.6.0
+//Version 0.6.1
 /*
 Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
 
@@ -158,12 +158,14 @@ task flySpeedAdjuster() {
 		flySpeed = 127;
 		}
 		}*/
-		if (vexRT[Btn5U]) {
-			while(vexRT[Btn5U]){wait1Msec(1);}
+		if (vexRT[Btn5U]&& vexRT[Btn5D]) {
+			while(vexRT[Btn5U] && vexRT[Btn5D]){wait1Msec(1);}
+			flyModifier = 0;
+		}else if (vexRT[Btn5U]) {
+			while(vexRT[Btn5U] && !vexRT[Btn5D]){wait1Msec(1);}
 			flyModifier++;
-		}
-		if (vexRT[Btn5D]) {
-			while(vexRT[Btn5D]){wait1Msec(1);}
+		}else if (vexRT[Btn5D]) {
+			while(vexRT[Btn5D] && !vexRT[Btn5U]){wait1Msec(1);}
 			flyModifier--;
 		}
 	}

@@ -1,4 +1,8 @@
 #pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
+#pragma config(Sensor, dgtl3,  encBL,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  encBR,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  encFL,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl9,  encFR,          sensorQuadEncoder)
 #pragma config(Motor,  port1,           mLFT2,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port3,           mBR,           tmotorVex393_MC29, openLoop, reversed)
