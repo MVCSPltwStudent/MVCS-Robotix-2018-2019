@@ -1,4 +1,4 @@
-//Version 0.5.0
+//Version 0.6.0
 /*
 Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
 
@@ -41,6 +41,7 @@ bool FireReady;
 bool halfSpeed = false;
 int flyModifier = 0;
 int flySpeed = 254;
+int blinker = 0;
 
 int mabs (int a) {
 	return a < 0 ? -a : a;
@@ -60,9 +61,7 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 			FL = FL/2;
 			BR = BR/2;
 			BL = BL/2;
-			turnLEDOn(LED);
 			} else {
-			turnLEDOff(LED);
 		}
 		motor[mFR] = FR;  //Applies Motor Speeds
 		motor[mFL] = FL;
@@ -169,7 +168,31 @@ task flySpeedAdjuster() {
 		}
 	}
 }
-
+task LEDControl(){
+	while(true){
+		if(flySpeed < 127){
+			while(flySpeed < 127){
+				if(flyModifier > 0){
+					blinker = 300;
+				} else if(flyModifier < 0){
+					blinker = 1000;
+				} else if (flyModifier == 0){
+					while(flyModifier == 0 && flySpeed < 127){
+						turnLEDOn(LED);
+						EndTimeSlice();
+					}
+				}
+				turnLEDOn(LED);
+				wait1Msec(100);
+				turnLEDOff(LED);
+				wait1Msec(blinker);
+			}
+		}else{
+			turnLEDOff(LED);
+			EndTimeSlice();
+		}
+	}
+}
 
 void begin()
 {
@@ -178,4 +201,5 @@ void begin()
 	flywheelRunning = false;
 	startTask(flywheelToggle);
 	startTask(flySpeedAdjuster);
+	startTask(LEDControl);
 }
