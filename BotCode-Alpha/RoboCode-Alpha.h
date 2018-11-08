@@ -45,15 +45,14 @@ bool flywheelRunning;
 int flySpeed = 500;
 signed int flyModifier = 0;
 int blinker = 0;
-int rpmFR;
-int rpmFL;
-int rpmBR;
-int rpmBL;
+int revFR;
+int revFL;
+int revBR;
+int revBL;
 
 int mabs (int a) {
 	return a < 0 ? -a : a;
 }
-
 task drivetrain(){ //Drivetrain Task. Joshua's code.
 	while(true){
 		FR = (-vexRT[Ch4] + vexRT[Ch3]) - vexRT[Ch1]; //Determines motor speeds. Joshua's Code.
@@ -190,6 +189,20 @@ task flySpeedAdjuster() {
 			while(vexRT[Btn5D] && !vexRT[Btn5U]){wait1Msec(1);}
 			flyModifier--;
 		}
+	}
+}
+task RPMTrack(){
+	int FRi,FLi,BRi,BLi;
+	while(true){
+		FRi = SensorValue[encFR];
+		FLi = SensorValue[encFL];
+		BLi = SensorValue[encBL];
+		BRi = SensorValue[encBR];
+		wait1Msec(2);
+		revFR = 500*(FR - SensorValue[encFR]);
+		revFL = 500*(FL - SensorValue[encFL]);
+		revBL = 500*(BL - SensorValue[encBL]);
+		revBR = 500*(BR - SensorValue[encBR]);
 	}
 }
 void Start()
