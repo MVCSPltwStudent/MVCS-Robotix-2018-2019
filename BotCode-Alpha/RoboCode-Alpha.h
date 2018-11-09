@@ -49,6 +49,9 @@ int revFR;
 int revFL;
 int revBR;
 int revBL;
+bool stopFL = false, stopFR = false, stopBL = false, stopBR = false;
+int ms = 1000;
+
 
 int mabs (int a) {
 	return a < 0 ? -a : a;
@@ -69,6 +72,14 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 			BL = BL/2;
 			} else {
 		}
+		if(stopFL)
+			FL = 0;
+		if(stopFR)
+			FR = 0;
+		if(stopBL)
+			BL = 0;
+		if(stopBR)
+			BR = 0;
 		motor[mFR] = FR;  //Applies Motor Speeds
 		motor[mFL] = FL;
 		motor[mBR] = BR;
@@ -114,6 +125,45 @@ task LEDControl(){
 			turnLEDOff(LED);
 			EndTimeSlice();
 		}
+	}
+}
+
+//Subroutine Definitions for task motorMother
+task resetFL(){
+	stopFL = true;
+	wait1Msec(ms);
+	stopFL = false;
+}
+task resetBL(){
+	stopBL = true;
+	wait1Msec(ms);
+	stopBL = false;
+}
+task resetFR(){
+	stopFR = true;
+	wait1Msec(ms);
+	stopFR = false;
+}
+task resetBR(){
+	stopBR = true;
+	wait1Msec(ms);
+	stopBR = false;
+}
+
+
+task motorMother(){
+	while(true){
+		hogCPU();
+		if(revBL == 0 && motor[mBL] > 40)
+			startTask(resetBL);
+		if(revBR == 0 && motor[mBR] > 40)
+			startTask(resetBR);
+		if(revFR == 0 && motor[mFR] > 40)
+			startTask(resetFR);
+		if(revFL == 0 && motor[mFL] > 40)
+			startTask(resetFL);
+		releaseCPU();
+		wait1Msec(250);
 	}
 }
 
@@ -213,4 +263,6 @@ void Start()
 	startTask(flywheelToggle);
 	startTask(flySpeedAdjuster);
 	startTask(LEDControl);
+	startTask(RPMTrack);
+	startTask(motorMother);
 }
