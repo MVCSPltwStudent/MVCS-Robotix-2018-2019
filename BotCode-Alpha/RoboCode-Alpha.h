@@ -35,6 +35,7 @@ Port10: Platform Boost system (?)
 //-----------------------------------------------IMPORTANT---------------------------------------------
 
 //Config
+const int adjustmentThreshhold = 0.04
 
 //Internal Use Variables
 int FR;
@@ -53,6 +54,54 @@ int revBL;
 int mabs (int a) {
 	return a < 0 ? -a : a;
 }
+void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
+	float ratios [4][2];
+	int *lo;
+	int *loSens;
+
+	motor[FR] = FRi;
+	motor[BR] = BRi;
+	motor[BL] = BLi;
+	motor[FL] = FLi;
+	if (FRi < BRi && FRi < BLi && FRi < FLi){
+		lo = &FRi;
+		loSens = &revFR;
+	} else if (BRi < BLi && BRi < FLi){
+		lo = &BRi;
+		loSens = &revBR;
+	} else if (BLi < FLi){
+		lo = &BLi;
+		loSens = &revBL;
+	} else {
+		lo = &FLi;
+		loSens = &revFL;
+	}
+	ratios[0][0] = FRi / *lo;
+	ratios[1][0] = BRi / *lo;
+	ratios[2][0] = BLi / *lo;
+	ratios[3][0] = FLi / *lo;
+	wait1Msec(3);
+	for(int i = 0; i < 5; i++){
+		ratios[0][1] = ratios[0][0] - (revFR / *loSens);
+		ratios[1][1] = ratios[0][0] - (revBR / *loSens);
+		ratios[2][1] = ratios[0][0] - (revBL / *loSens);
+		ratios[3][1] = ratios[0][0] - (revFL / *loSens);
+		if(abs(ratios[0][1]) > adjustmentThreshhold){
+			motor[mFR] += 5*sgn(ratios[0][1]);
+		}
+		if(abs(ratios[1][1]) > adjustmentThreshhold){
+			motor[mBR] += 5*sgn(ratios[1][1]);
+		}
+		if(abs(ratios[2][1]) > adjustmentThreshhold){
+			motor[mBL] += 5*sgn(ratios[2][1]);
+		}
+		if(abs(ratios[3][1]) > adjustmentThreshhold){
+			motor[mFL] += 5*sgn(ratios[3][1]);
+		}
+		wait1Msec(3);
+	}
+}
+
 task drivetrain(){ //Drivetrain Task. Joshua's code.
 	while(true){
 		FR = (-vexRT[Ch4] + vexRT[Ch3]) - vexRT[Ch1]; //Determines motor speeds. Joshua's Code.
