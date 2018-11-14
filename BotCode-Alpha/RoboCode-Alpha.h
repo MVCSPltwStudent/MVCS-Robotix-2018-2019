@@ -44,7 +44,7 @@ int BL;
 bool flywheelRunning;
 int flySpeed = 127;
 signed int flyModifier = 0;
-bool inPos= = true;
+bool inPos = true;
 int handGoal;
 
 
@@ -174,9 +174,21 @@ task cascadeLift(){
 		} else {
 			motor[mLFT] = 0;
 		}
+		EndTimeSlice();
 	}
 }
-
+task clawControl(){
+	while(true){
+		if(vexRT[Btn7R]){
+			motor[mCLW] = 127;
+		} else if (vexRT[Btn7L]) {
+			motor[mCLW] = -127;
+		} else {
+			motor[mCLW] = 0;
+		}
+		EndTimeSlice();
+	}
+}
 void Start()
 {
 	startTask(drivetrain);
@@ -185,4 +197,5 @@ void Start()
 	startTask(flywheelToggle);
 	startTask(flySpeedAdjuster);
 	startTask(cascadeLift);
+	startTask(clawControl);
 }
