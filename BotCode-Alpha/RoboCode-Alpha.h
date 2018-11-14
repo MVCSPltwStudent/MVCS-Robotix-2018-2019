@@ -165,14 +165,11 @@ task flySpeedAdjuster() {
 task cascadeLift(){
 	while(true){
 		if(vexRT[Btn7U]){
-			motor[port1] = 127;
-			motor[port10] = 127;
+			motor[mLFT] = 127;
 		} else if (vexRT[Btn7D]) {
-			motor[port1] = -127;
-			motor[port10] = -127;
+			motor[mLFT] = -127;
 		} else {
-			motor[port1] = 0;
-			motor[port10] = 0;
+			motor[mLFT] = 0;
 		}
 	}
 }
