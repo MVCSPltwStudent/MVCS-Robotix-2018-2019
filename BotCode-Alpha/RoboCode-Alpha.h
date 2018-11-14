@@ -44,6 +44,9 @@ int BL;
 bool flywheelRunning;
 int flySpeed = 127;
 signed int flyModifier = 0;
+bool inPos= = true;
+int handGoal;
+
 
 int mabs (int a) {
 	return a < 0 ? -a : a;
@@ -165,14 +168,11 @@ task flySpeedAdjuster() {
 task cascadeLift(){
 	while(true){
 		if(vexRT[Btn7U]){
-			motor[port1] = 127;
-			motor[port10] = 127;
+			motor[mLFT] = 127;
 		} else if (vexRT[Btn7D]) {
-			motor[port1] = -127;
-			motor[port10] = -127;
+			motor[mLFT] = -127;
 		} else {
-			motor[port1] = 0;
-			motor[port10] = 0;
+			motor[mLFT] = 0;
 		}
 	}
 }
