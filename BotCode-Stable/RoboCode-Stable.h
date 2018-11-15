@@ -239,7 +239,7 @@ task autoClaw(){  //keep claw in position
         } else { //if the current position is not off
             motor[mCLW] = 0; //stop the claw
         }
-        
+
         EndTimeSlice(); //tell task handler done
     }
 }
@@ -258,7 +258,7 @@ task autoLift(){
         } else { //else (lift is not off the target by at least 50)
             motor[mLFT] = 0; //stop the lift
         }
-        
+
         EndTimeSlice(); //tell task handler done
     }
 }
@@ -269,31 +269,31 @@ task liftClawControllerInterface(){
     startTask(autoClaw);
     while (true) {
         if (vexRT[Btn7D]) {                         //if button for lift pressed
-            while (vexRT[Btn7D]) {wait1Msec();}     //wait until button un-pressed
+            while (vexRT[Btn7D]) {wait1Msec(1);}     //wait until button un-pressed
             switch (liftTarget) {                   //switch case:
                 case liftBottom:                    //if target is set to bottom
                     liftTarget = liftMiddle;        //set target to middle
                     break;
-                    
+
                 case liftMiddle:                    //if target set to middle
                     liftTarget = liftTop;           //set target to top
                     break;
-                    
+
                 default:                            //else
                     liftTarget = liftBottom;        //set target to bottom
                     break;
             }
         }
         if (vexRT[Btn7R]) {                         //if button for claw pressed
-            while (vexRT[Btn7R]) {wait1Msec();}     //wait until un-pressed
+            while (vexRT[Btn7R]) {wait1Msec(1);}     //wait until un-pressed
             switch (armTarget) {                    //switch case:
                 case Down:                          //if target is set to down position
                     armTarget = Lifted;             //set target to lifted position
                     break;
-                    
+
                 default:                            //else
                     armTarget = Down;               //set target to down position
-                    liftTarget = liftBottom
+                    liftTarget = liftBottom;
                     break;
             }
         }
