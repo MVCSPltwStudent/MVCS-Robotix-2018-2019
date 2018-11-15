@@ -85,9 +85,9 @@ void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     wait1Msec(3);
     for(int i = 0; i < 5; i++){
         ratios[0][1] = ratios[0][0] - (revFR / *loSens);
-        ratios[1][1] = ratios[0][0] - (revBR / *loSens);
-        ratios[2][1] = ratios[0][0] - (revBL / *loSens);
-        ratios[3][1] = ratios[0][0] - (revFL / *loSens);
+        ratios[1][1] = ratios[1][0] - (revBR / *loSens);
+        ratios[2][1] = ratios[2][0] - (revBL / *loSens);
+        ratios[3][1] = ratios[3][0] - (revFL / *loSens);
         if(abs(ratios[0][1]) > adjustmentThreshhold){
             motor[mFR] += 5*sgn(ratios[0][1]);
         }
@@ -198,38 +198,10 @@ task flySpeedAdjuster() {
             case 500:
                 flySpeed = lv1;
                 break;
-                /*
-                case lv1:
-                flySpeed = lv2;
-                break;
-                */ /*
-                case lv2:
-                flySpeed = lv3;
-                break;
-                */
             default:
                 flySpeed = 500;
             }
-        }/*
-        if (vexRT[Btn8R]) {
-        while (!vexRT[Btn8R]){wait1Msec(1);}
-        switch (flySpeed) {
-        case 127:
-        flySpeed = lv3;
-        break;
-
-        case lv3:
-        flySpeed = lv2;
-        break;
-
-        case lv2:
-        flySpeed = lv1;
-        break;
-
-        default:
-        flySpeed = 127;
         }
-        }*/
         if (vexRT[Btn5U]&& vexRT[Btn5D]) {
             while(vexRT[Btn5U] && vexRT[Btn5D]){wait1Msec(1);}
             flyModifier = 0;
