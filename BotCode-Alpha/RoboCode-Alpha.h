@@ -44,9 +44,8 @@ int BL;
 bool flywheelRunning;
 int flySpeed = 127;
 signed int flyModifier = 0;
-bool inPos = true;
-int handGoal;
-
+int armTarget;
+int liftTarget;
 
 int mabs (int a) {
 	return a < 0 ? -a : a;
@@ -165,7 +164,7 @@ task flySpeedAdjuster() {
 	}
 }
 
-task cascadeLift(){
+task cascadeLift(){  //basic motor control by 2 buttons
 	while(true){
 		if(vexRT[Btn7U]){
 			motor[mLFT] = 127;
@@ -177,7 +176,7 @@ task cascadeLift(){
 		EndTimeSlice();
 	}
 }
-task clawControl(){
+task clawControl(){  //basic motor control by 2 buttons
 	while(true){
 		if(vexRT[Btn7R]){
 			motor[mCLW] = 127;
@@ -188,6 +187,81 @@ task clawControl(){
 		}
 		EndTimeSlice();
 	}
+}
+task autoClaw(){  //keep claw in position
+    int sens;
+    armTarget = SensorValue[Claw]/10;  //set target to current position to prevent early movement
+    while (true) {
+        sens = SensorValue[Claw]/10; //determine current claw position
+        if(mabs(sens-armTarget) > 5){  // if the current position is off of the target by 50 in either directio, continue
+            if (sens > armTarget) { //if the position is higher than the target
+                motor[mCLW] = -127; //set motor to go down
+            } else {                //else
+                motor[mCLW] = 127; //set motor to go up
+            }
+        } else { //if the current position is not off
+            motor[mCLW] = 0; //stop the claw
+        }
+        
+        EndTimeSlice(); //tell task handler done
+    }
+}
+task autoLift(){
+    int sensLift;
+    SensorValue[quadLift] = 0; //initialize the quad encoder to 0;
+    liftTarget = SensorValue[quadLift]/10; //set target to current position to prevent unwanted movement
+    while (true) {
+        sensLift = SensorValue[quadLift]/10; // determine current lift position
+        if(mabs(sensLift-liftTarget) > 5){ //if lift is off the target by at least 50
+            if (sensLift > liftTarget) { //if the lift is above the target
+                motor[mLFT] = -127; //move lift down
+            } else {                //else (the lift is below the target)
+                motor[mLFT] = 127; // move lift up
+            }
+        } else { //else (lift is not off the target by at least 50)
+            motor[mLFT] = 0; //stop the lift
+        }
+        
+        EndTimeSlice(); //tell task handler done
+    }
+}
+task liftClawControllerInterface(){
+    stopTask(cascadeLift); //stop manual control
+    stopTask(clawControl);
+    startTask(autoLift);  //ensure position monitors already running
+    startTask(autoClaw);
+    while (true) {
+        if (vexRT[Btn7D]) {                         //if button for lift pressed
+            while (vexRT[Btn7D]) {wait1Msec();}     //wait until button un-pressed
+            switch (liftTarget) {                   //switch case:
+                case liftBottom:                    //if target is set to bottom
+                    liftTarget = liftMiddle;        //set target to middle
+                    break;
+                    
+                case liftMiddle:                    //if target set to middle
+                    liftTarget = liftTop;           //set target to top
+                    break;
+                    
+                default:                            //else
+                    liftTarget = liftBottom;        //set target to bottom
+                    break;
+            }
+        }
+        if (vexRT[Btn7R]) {                         //if button for claw pressed
+            while (vexRT[Btn7R]) {wait1Msec();}     //wait until un-pressed
+            switch (armTarget) {                    //switch case:
+                case Down:                          //if target is set to down position
+                    armTarget = Lifted;             //set target to lifted position
+                    break;
+                    
+                default:                            //else
+                    armTarget = Down;               //set target to down position
+                    liftTarget = liftBottom
+                    break;
+            }
+        }
+        EndTimeSlice();
+    }
 }
 void Start()
 {

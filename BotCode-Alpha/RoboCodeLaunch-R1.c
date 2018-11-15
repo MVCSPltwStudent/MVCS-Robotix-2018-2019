@@ -17,9 +17,15 @@
 
 //COnfigurable Constants
 const int lv1 = 50;
-const int Lifted = 2000;
-const int Down = 0;
 
+//Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
+const int Lifted = 200;
+const int Down = 40;
+
+//Encoder Values for Lift Hieghts. Multiply Values by 10
+const int liftBottom = 0;
+const int liftMidway = 100;
+const int liftTop = 100;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -52,7 +58,9 @@ const int Down = 0;
 void pre_auton()
 {
   bStopTasksBetweenModes = true;
-
+    startTask(autoLift); //start task to move Lift
+    startTask(autoClaw); //start task to move Claw
+    
 	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
 	// used by the competition include file, for example, you might want
 	// to display your team name on the LCD in this function.
