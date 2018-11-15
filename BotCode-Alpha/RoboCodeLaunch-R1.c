@@ -1,13 +1,13 @@
-#pragma config(Sensor, dgtl2,  LED1,           sensorLEDtoVCC)
-#pragma config(Sensor, dgtl3,  LED,            sensorLEDtoVCC)
+#pragma config(Sensor, in2,    Claw,    sensorPotentiometer)
+#pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
 #pragma config(Sensor, dgtl10, BTN1,           sensorTouch)
 #pragma config(Sensor, dgtl11, BTN2,           sensorTouch)
 #pragma config(Sensor, dgtl12, BTN3,           sensorTouch)
-#pragma config(Motor,  port1,           mLFT2,         tmotorVex393_HBridge, openLoop)
+#pragma config(Motor,  port1,           mFL,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           mBR,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           mGRB,          tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port5,           mFL,           tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port5,           mLFT,           tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port6,           mFR,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           mCLW,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port8,           mFRE,          tmotorVex393HighSpeed_MC29, openLoop)
@@ -17,7 +17,14 @@
 
 const int lv1 = 70;
 
+//Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
+const int Lifted = 200;
+const int Down = 40;
 
+//Encoder Values for Lift Hieghts. Multiply Values by 10
+const int liftBottom = 0;
+const int liftMidway = 100;
+const int liftTop = 100;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -50,11 +57,13 @@ const int lv1 = 70;
 void pre_auton()
 {
   bStopTasksBetweenModes = true;
-
-	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
-	// used by the competition include file, for example, you might want
-	// to display your team name on the LCD in this function.
-	// bDisplayCompetitionStatusOnLcd = false;
+    startTask(autoLift); //start task to move Lift
+    startTask(autoClaw); //start task to move Claw
+    
+    // Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
+    // used by the competition include file, for example, you might want
+    // to display your team name on the LCD in this function.
+    // bDisplayCompetitionStatusOnLcd = false;
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
