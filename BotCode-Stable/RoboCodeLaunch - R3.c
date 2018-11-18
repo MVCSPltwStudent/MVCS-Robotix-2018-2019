@@ -1,4 +1,6 @@
+#pragma config(Sensor, in2,    Claw,           sensorPotentiometer)
 #pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
+#pragma config(Sensor, dgtl3,  quadLift,       sensorQuadEncoder)
 #pragma config(Motor,  port1,           mFL,         tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port3,           mBR,           tmotorVex393_MC29, openLoop, reversed)
@@ -14,6 +16,14 @@
 
 const int lv1 = 70;
 
+//Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
+const int Lifted = 200;
+const int Down = 40;
+
+//Encoder Values for Lift Hieghts. Multiply Values by 10
+const int liftBottom = 0;
+const int liftMiddle = 100;
+const int liftTop = 100;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
