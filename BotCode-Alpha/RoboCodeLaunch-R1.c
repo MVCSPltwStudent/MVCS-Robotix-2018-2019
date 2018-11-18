@@ -21,10 +21,10 @@
 #define Down 60;
 
 //Encoder Values for Lift Hieghts. Multiply Values by 10
-const int liftBottom = 0;
-const int liftMidway = 130;
-const int liftTop = 200;
-const int removeMod= 50;
+#define liftBottom 0;
+#define liftMidway 130;
+#define liftTop 200;
+#define removeMod 50;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */

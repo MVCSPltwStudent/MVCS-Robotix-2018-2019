@@ -100,19 +100,19 @@ int rmt(char[2] a){    //allow remote switching
             switch(a[1]){
                     //Pad 8
                 case 'U':
-                    return secondary ? vexRT[8UXmtr2] : vexRT[8U];
+                    return secondary ? vexRT[Btn8UXmtr2] : vexRT[Btn8U];
                     break;
             
                 case 'D':
-                    return secondary ? vexRT[8DXmtr2] : vexRT[8D];
+                    return secondary ? vexRT[Btn8DXmtr2] : vexRT[Btn8D];
                     break;
             
                 case 'L':
-                    return secondary ? vexRT[8LXmtr2] : vexRT[8L];
+                    return secondary ? vexRT[Btn8LXmtr2] : vexRT[Btn8L];
                     break;
             
                 case 'R':
-                    return secondary ? vexRT[8RXmtr2] : vexRT[8R];
+                    return secondary ? vexRT[Btn8RXmtr2] : vexRT[Btn8R];
                     break;
             }
             break;
@@ -121,11 +121,11 @@ int rmt(char[2] a){    //allow remote switching
             switch(a[1]){
                     //triggers 6
                 case 'U':
-                    return secondary ? vexRT[6UXmtr2] : vexRT[6U];
+                    return secondary ? vexRT[Btn6UXmtr2] : vexRT[Btn6U];
                     break;
             
                 case 'D':
-                    return secondary ? vexRT[6DXmtr2] : vexRT[6D];
+                    return secondary ? vexRT[Btn6DXmtr2] : vexRT[Btn6D];
                     break;
             }
             break;
@@ -135,11 +135,11 @@ int rmt(char[2] a){    //allow remote switching
             
                     //triggers 5
                 case 'U':
-                    return secondary ? vexRT[5UXmtr2] : vexRT[5U];
+                    return secondary ? vexRT[Btn5UXmtr2] : vexRT[Btn5U];
                     break;
             
                 case 'D':
-                    return secondary ? vexRT[5DXmtr2] : vexRT[5D];
+                    return secondary ? vexRT[Btn5DXmtr2] : vexRT[Btn5D];
                     break;
             }
             break;
@@ -224,8 +224,8 @@ void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
 
 task controllerSwitch(){
     while(true){
-        if (vexRT[8RXmtr2]){
-            while(vexRT[8RXmtr2]){wait1Msec(1);}
+        if (vexRT[Btn8RXmtr2]){
+            while(vexRT[Btn8RXmtr2]){wait1Msec(1);}
             secondary  = !secondary;
         }
     }
