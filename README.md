@@ -20,8 +20,8 @@ Pad 7:
 Pad 8:
     U: 
     D: Toggle Flywheel
-    L:
-    R:
+    L: Toggle Flywheel Speed
+    R: flip Robot head
 
 Triggers 5:
     U: Increase Flywheel Speed Modifier

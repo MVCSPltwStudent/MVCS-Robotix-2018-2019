@@ -27,12 +27,16 @@ Port10: Platform Boost system (?)
 
 */
 
-
+#include <string.h>
+#define s2 "Xmtr2"
+#define STR_SIZE 10
 
 // ----------------------------------------------IMPORTANT---------------------------------------------
 // USE SEPARATE TASKS FOR EVERYTHING. IT ACCOMPLISHES THE SAME THING AS PUTTING EVERYTHING IN MAIN,
 // BUT IT'S MORE ORGANIZED AND HELPS DEBUG
 //-----------------------------------------------IMPORTANT---------------------------------------------
+
+
 
 //Config
 const int adjustmentThreshhold = 0.04
@@ -52,10 +56,124 @@ int revBR;
 int revBL;
 int armTarget;
 int liftTarget;
+int headFlip = 1;
+bool liftOff;
+bool armOff;
+bool secondary = false;
+
+int rmt2(char[5] s1){
+    char result[STR_SIZE];
+    if (secondary){
+        snprintf(result, sizeof(result), "%s %s", a1, s2);
+    } else {
+        result[] = s1[];
+    }
+    return vexRT[result];
+}
+
+
+int rmt(char[2] a){    //allow remote switching
+    switch (a [0]) {
+        case '7':
+            switch (a[1]) {
+                
+                    //Pad 7
+                case 'U':
+                    return secondary ? vexRT[Btn7UXmtr2] : vexRT[Btn7U];
+                    break;
+                    
+                case 'D':
+                    return secondary ? vexRT[Btn7DXmtr2] : vexRT[Btn7D];
+                    break;
+            
+                case 'L':
+                    return secondary ? vexRT[Btn7LXmtr2] : vexRT[Btn7L];
+                    break;
+            
+                case 'R':
+                    return secondary ? vexRT[Btn7RXmtr2] : vexRT[Btn7R];
+                    break;
+            }
+            break;
+            
+        case '8':
+            switch(a[1]){
+                    //Pad 8
+                case 'U':
+                    return secondary ? vexRT[8UXmtr2] : vexRT[8U];
+                    break;
+            
+                case 'D':
+                    return secondary ? vexRT[8DXmtr2] : vexRT[8D];
+                    break;
+            
+                case 'L':
+                    return secondary ? vexRT[8LXmtr2] : vexRT[8L];
+                    break;
+            
+                case 'R':
+                    return secondary ? vexRT[8RXmtr2] : vexRT[8R];
+                    break;
+            }
+            break;
+            
+        case '6':
+            switch(a[1]){
+                    //triggers 6
+                case 'U':
+                    return secondary ? vexRT[6UXmtr2] : vexRT[6U];
+                    break;
+            
+                case 'D':
+                    return secondary ? vexRT[6DXmtr2] : vexRT[6D];
+                    break;
+            }
+            break;
+            
+        case '5':
+            switch(a[1]){
+            
+                    //triggers 5
+                case 'U':
+                    return secondary ? vexRT[5UXmtr2] : vexRT[5U];
+                    break;
+            
+                case 'D':
+                    return secondary ? vexRT[5DXmtr2] : vexRT[5D];
+                    break;
+            }
+            break;
+            
+        case 'C':
+            switch(a[1]){
+        
+                    //joystick channels
+                case '1':
+                    return secondary ? vexRT[Ch1Xmtr2] : vexRT[Ch1];
+                    break;
+        
+                case '2':
+                    return secondary ? vexRT[Ch2Xmtr2] : vexRT[Ch2];
+                    break;
+            
+                case '3':
+                    return secondary ? vexRT[Ch3Xmtr2] : vexRT[Ch3];
+                    break;
+            
+                case '4':
+                    return secondary ? vexRT[Ch4Xmtr2] : vexRT[Ch4];
+                    break;
+            }
+    }
+    return 0;
+}
+
 
 int mabs (int a) {
     return a < 0 ? -a : a;
 }
+
+
 void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     float ratios [4][2];
     int *lo;
@@ -104,17 +222,25 @@ void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     }
 }
 
+task controllerSwitch(){
+    while(true){
+        if (vexRT[8RXmtr2]){
+            while(vexRT[8RXmtr2]){wait1Msec(1);}
+            secondary  = !secondary;
+        }
+    }
+}
 task drivetrain(){ //Drivetrain Task. Joshua's code.
     while(true){
-        FR = (-vexRT[Ch4] + vexRT[Ch3]) - vexRT[Ch1]; //Determines motor speeds. Joshua's Code.
-        FL = (-vexRT[Ch4] - vexRT[Ch3]) - vexRT[Ch1];
-        BL = (vexRT[Ch4] - vexRT[Ch3]) - vexRT[Ch1];
-        BR = (vexRT[Ch4] + vexRT[Ch3]) - vexRT[Ch1];
+        FR = (headFlip * (-vexRT[Ch4] + vexRT[Ch3])) - vexRT[Ch1]; //Determines motor speeds. Joshua's Code.
+        FL = (headFlip * (-vexRT[Ch4] - vexRT[Ch3])) - vexRT[Ch1];
+        BL = (headFlip * (vexRT[Ch4] - vexRT[Ch3])) - vexRT[Ch1];
+        BR = (headFlip * (vexRT[Ch4] + vexRT[Ch3])) - vexRT[Ch1];
         if (mabs(vexRT[Ch4]) < 20 && mabs(vexRT[Ch3]) < 20 && mabs(vexRT[Ch1]) < 30){ //Checks if joystick is in deadzone
             FR = FL = BR = BL = 0;                                                                                                    //if so, sets motor speeds to 0
         }
-        if(sqrt((vexRT[Ch4]*vexRT[Ch4]) + (vexRT[Ch3]*vexRT[Ch3])) < 120 && sqrt((vexRT[Ch1]*vexRT[Ch1]) + (vexRT[Ch2]*vexRT[Ch2])) < 120){
-            FR = FR/2;
+        if(sqrt((vexRT[Ch4]*vexRT[Ch4]) + (vexRT[Ch3]*vexRT[Ch3])) < 120 && sqrt((vexRT[Ch1]*vexRT[Ch1]) + (vexRT[Ch2]*vexRT[Ch2])) < 120){    //if Joystick not at extremes
+            FR = FR/2;      //halfSpeed
             FL = FL/2;
             BR = BR/2;
             BL = BL/2;
@@ -124,12 +250,15 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
         motor[mFL] = FL;
         motor[mBR] = BR;
         motor[mBL] = BL;
-
+        if(vexRT[Btn8R]){                           //tests for button to flip robot head
+            while (vexRT[Btn8R]) { Wait1Msec(1);}
+            headFlip *= -1                         //flips head
+        }
         EndTimeSlice(); //tells task handler is done
     }
 }
 
-
+bool remote
 task ballGrabber(){ //Ball intake system code
     while(true){
         if (vexRT[Btn6U]) { //if 6U pressed...
@@ -142,28 +271,29 @@ task ballGrabber(){ //Ball intake system code
         EndTimeSlice(); //tell task handler done
     }
 }
-task LEDControl(){
+task LEDControl(){      //task to turn LED on & off
     while(true){
-        if(flySpeed < 127){
-            while(flySpeed < 127){
-                if(flyModifier > 0){
-                    blinker = 300;
-                } else if(flyModifier < 0){
-                    blinker = 1000;
-                } else if (flyModifier == 0){
-                    while(flyModifier == 0 && flySpeed < 127){
-                        turnLEDOn(LED);
-                        EndTimeSlice();
+        if(flySpeed < 127){                 //if flywheel is in secondary state
+            while(flySpeed < 127){          //while it's in secondary state
+                if(flyModifier > 0){        //if the modifier is positive
+                    blinker = 300;          //set blinking delay to 300
+                } else if(flyModifier < 0){ //if modifier is negative
+                    blinker = 1000;         //set delay to 1000
+                } else  {                   //else (it's 0)
+                    while(flyModifier == 0 && flySpeed < 127){  //while modifier is 0
+                        turnLEDOn(LED);                         //keep LED on
+                        EndTimeSlice();                         //tell task handler is done
                     }
                 }
-                turnLEDOn(LED);
-                wait1Msec(100);
-                turnLEDOff(LED);
-                wait1Msec(blinker);
+                turnLEDOn(LED);     //turn LED on
+                wait1Msec(100);     //wait 100 ms
+                turnLEDOff(LED);    //turn LED off
+                wait1Msec(blinker); //wait for [blinking delay] ms
+                EndTimeSlice(); //tell task handler is done
             }
-        }else{
-            turnLEDOff(LED);
-            EndTimeSlice();
+        }else{              //else (flySpeed is in full power)
+            turnLEDOff(LED);//turn off LED
+            EndTimeSlice(); //tell task handler done
         }
     }
 }
@@ -188,45 +318,46 @@ task flywheelToggle() { //detects button presses to toggle the flywheel
     }
 }
 
-task flySpeedAdjuster() {
+task flySpeedAdjuster() {       //Adjust the flywheel Speeds
     while(true){
-        if (vexRT[Btn8L]) {
-            while(vexRT[Btn8L]){
+        if (vexRT[Btn8L]) {             //if 8L pressed
+            while(vexRT[Btn8L]){        //wait until not pressed
                 wait1Msec(1);
             }
             switch(flySpeed){
-            case 500:
-                flySpeed = lv1;
+            case 500:                   //if flySpeed = 500
+                flySpeed = lv1;         //set flySpeed to lv1
                 break;
-            default:
-                flySpeed = 500;
+            default:                    //else
+                flySpeed = 500;         //set flyspeed to 500
             }
         }
-        if (vexRT[Btn5U]&& vexRT[Btn5D]) {
+        if (vexRT[Btn5U]&& vexRT[Btn5D]) {                      //if 5U+5D
             while(vexRT[Btn5U] && vexRT[Btn5D]){wait1Msec(1);}
-            flyModifier = 0;
-        }else if (vexRT[Btn5U]) {
+            flyModifier = 0;                                    //reset modifier
+        }else if (vexRT[Btn5U]) {                               //if 5U
             while(vexRT[Btn5U] && !vexRT[Btn5D]){wait1Msec(1);}
-            flyModifier++;
-        }else if (vexRT[Btn5D]) {
+            flyModifier++;                                      //increase modifier
+        }else if (vexRT[Btn5D]) {                               //if 5D
             while(vexRT[Btn5D] && !vexRT[Btn5U]){wait1Msec(1);}
-            flyModifier--;
+            flyModifier--;                                      //decrease modifier
         }
     }
 }
 task RPMTrack(){
 	int FRi,FLi,BRi,BLi;
 	while(true){
-		FRi = SensorValue[encFR];
+		FRi = SensorValue[encFR];       //find initial sensor values
 		FLi = SensorValue[encFL];
 		BLi = SensorValue[encBL];
 		BRi = SensorValue[encBR];
-		wait1Msec(2);
-		revFR = 500*(FR - SensorValue[encFR]);
+		wait1Msec(2);                   // wait 2 ms
+		revFR = 500*(FR - SensorValue[encFR]);  //determine rotational speed (Deg/m)
 		revFL = 500*(FL - SensorValue[encFL]);
 		revBL = 500*(BL - SensorValue[encBL]);
 		revBR = 500*(BR - SensorValue[encBR]);
 	}
+}
 
 task cascadeLift(){  //basic motor control by 2 buttons
 	while(true){
@@ -252,41 +383,42 @@ task clawControl(){  //basic motor control by 2 buttons
 		EndTimeSlice();
 	}
 }
-task autoClaw(){  //keep claw in position
-    int sens;
+task autoClaw(){  //handle Claw Movement
+    
     armTarget = SensorValue[Claw]/10;  //set target to current position to prevent early movement
     while (true) {
-        sens = SensorValue[Claw]/10; //determine current claw position
-        if(mabs(sens-armTarget) > 5){  // if the current position is off of the target by 50 in either directio, continue
-            if (sens > armTarget) { //if the position is higher than the target
-                motor[mCLW] = -127; //set motor to go down
-            } else {                //else
-                motor[mCLW] = 127; //set motor to go up
+        sens = SensorValue[Claw]/10;    //determine current claw position
+        if(mabs(sens-armTarget) > 1){   // if the current position is off of the target by at least 10
+            if (sens > armTarget) {     //if the position is higher than the target
+                motor[mCLW] = -127;     //set motor to go down
+            } else {                    //else
+                motor[mCLW] = 127;      //set motor to go up
             }
-        } else { //if the current position is not off
-            motor[mCLW] = 0; //stop the claw
+        } else {                        //if the current position is not off
+            motor[mCLW] = 0;            //stop the claw
         }
         
         EndTimeSlice(); //tell task handler done
     }
 }
-task autoLift(){
+task autoLift(){ //Task to move Lift into postition
     int sensLift;
-    SensorValue[quadLift] = 0; //initialize the quad encoder to 0;
-    liftTarget = SensorValue[quadLift]/10; //set target to current position to prevent unwanted movement
+    SensorValue[quadLift] = 0;                  //initialize the quad encoder to 0;
+    liftTarget = SensorValue[quadLift]/10;      //set target to current position to prevent unwanted movement
     while (true) {
-        sensLift = SensorValue[quadLift]/10; // determine current lift position
-        if(mabs(sensLift-liftTarget) > 5){ //if lift is off the target by at least 50
-            if (sensLift > liftTarget) { //if the lift is above the target
-                motor[mLFT] = -127; //move lift down
-            } else {                //else (the lift is below the target)
-                motor[mLFT] = 127; // move lift up
+        sensLift = SensorValue[quadLift]/10;    // determine current lift position
+        liftOff = mabs(sensLift-liftTarget) > 1;
+        if(liftOff){                            //if lift is off the target by at least 10
+            if (sensLift > liftTarget) {        //if the lift is above the target
+                motor[mLFT] = -127;             //move lift down
+            } else {                            //else (the lift is below the target)
+                motor[mLFT] = 127;              // move lift up
             }
-        } else { //else (lift is not off the target by at least 50)
-            motor[mLFT] = 0; //stop the lift
+        } else {                                //else (lift is not off the target by at least 50)
+            motor[mLFT] = 0;                    //stop the lift
         }
         
-        EndTimeSlice(); //tell task handler done
+        EndTimeSlice();            //tell task handler done
     }
 }
 task liftClawControllerInterface(){
@@ -311,8 +443,8 @@ task liftClawControllerInterface(){
                     break;
             }
         }
-        if (vexRT[Btn7R]) {                         //if button for claw pressed
-            while (vexRT[Btn7R]) {wait1Msec();}     //wait until un-pressed
+        if (vexRT[Btn7L]) {                         //if button for claw pressed
+            while (vexRT[Btn7L]) {wait1Msec();}     //wait until un-pressed
             switch (armTarget) {                    //switch case:
                 case Down:                          //if target is set to down position
                     armTarget = Lifted;             //set target to lifted position
@@ -320,9 +452,23 @@ task liftClawControllerInterface(){
                     
                 default:                            //else
                     armTarget = Down;               //set target to down position
-                    liftTarget = liftBottom
+                    wait1Msec(500);
+                    liftTarget = liftBottom;
                     break;
             }
+        }
+        if(vexRT[Btn7R] && liftTarget < 190 && liftTarget > 50){    //if cap flip activated and lift is in position
+            while(vexRT[Btn7R]){wait1Msec(1);}
+            liftTarget += removeMod;                //move lift up my predetermined value
+            do{wait1Msec(2);} while (liftOff);      //wait until in position
+            armTarget = Lifted;                     //set move arm to up position
+            liftTarget += 10;                       //move lift up a little more
+            do{wait1Msec(2);}while(liftOff);        //wait until in position
+            liftTarget += -(removeMod+10);          //move lift back down
+            do{wait1Msec(2);}while(liftOff);        //wait unti in position
+            armTarget = Down;                       //move arm down
+            wait1Msec(500);                         //wait 500 ms
+            liftTarget = liftBottom;                //move lift down
         }
         EndTimeSlice();
     }

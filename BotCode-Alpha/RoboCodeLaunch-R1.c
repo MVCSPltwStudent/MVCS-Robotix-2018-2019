@@ -18,13 +18,14 @@
 const int lv1 = 70;
 
 //Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
-const int Lifted = 200;
-const int Down = 40;
+const int Lifted = 220;
+const int Down = 60;
 
 //Encoder Values for Lift Hieghts. Multiply Values by 10
 const int liftBottom = 0;
-const int liftMidway = 100;
-const int liftTop = 100;
+const int liftMidway = 130;
+const int liftTop = 200;
+const int removeMod= 50;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
