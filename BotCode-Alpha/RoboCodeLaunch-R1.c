@@ -1,4 +1,5 @@
 #pragma config(Sensor, in2,    Claw,    sensorPotentiometer)
+#pragma config(Sensor, dgtl2,  configLED,            sensorLEDtoVCC)
 #pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
 #pragma config(Sensor, dgtl10, BTN1,           sensorTouch)
 #pragma config(Sensor, dgtl11, BTN2,           sensorTouch)
@@ -44,6 +45,8 @@
 #include "RoboCode-Alpha.h"
 
 
+bool liftControlMode;
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -57,8 +60,19 @@
 void pre_auton()
 {
   bStopTasksBetweenModes = true;
-    startTask(autoLift); //start task to move Lift
-    startTask(autoClaw); //start task to move Claw
+    wait1Msec(500);
+    turnLEDOn(configLED);
+    wait1Msec(1500);
+    
+    /*------------------------------------------*/
+    /*      Insert Pre Config Options Here      */
+    /*------------------------------------------*/
+    
+    liftControlMode = vexRT[btn7U] == 1
+    
+    
+    /*------------------------------------------*/
+    turnLEDOff(configLED);
 
     // Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
     // used by the competition include file, for example, you might want

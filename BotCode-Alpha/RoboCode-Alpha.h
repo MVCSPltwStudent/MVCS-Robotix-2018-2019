@@ -482,7 +482,11 @@ void Start()
     flywheelRunning = false;
     startTask(flywheelToggle);
     startTask(flySpeedAdjuster);
+    if(!liftClawControl){
+        startTask(liftClawControllerInterface);
+    } else {
 	startTask(cascadeLift);
 	startTask(clawControl);
+    }
 	startTask(LEDControl);
 }

@@ -68,7 +68,6 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 		} else {
 			turnLEDOff(LED);
 		}
-=======
 		if(sqrt((vexRT[Ch4]^2) + (vexRT[Ch3]^2)) < 127){
 			FR = FR / 2;
 			FL = FL / 2;
@@ -77,8 +76,7 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
 			turnLEDOn(LED);
 		} else {
 		turnLEDOff(LED);
-	}
->>>>>>> f7729d47f0dd47cc55f752e249f15fdad9ea4292
+        }
 			motor[mFR] = FR;  //Applies Motor Speeds
 			motor[mFL] = FL;
 			motor[mBR] = BR;

@@ -32,17 +32,3 @@ Port10: Platform Boost system (?)
 
 .
 .
-
-CHANGELOG
-
-.
-
-v0.1.0
-
-+Added Drivetrain Control
-
-+Added intake Control
-
-v0.1.1
-
-=Updated Motor configuration
