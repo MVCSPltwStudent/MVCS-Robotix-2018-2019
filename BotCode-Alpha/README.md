@@ -10,7 +10,7 @@ IMPORTANT: THE FRONT OF THE ROBOT IS THE INTAKE SIDE.
 
 Connection Guide:
 
- Port1: LiftMotor2 (Can be combined with Prt. 6 in necessity
+ Port1: Front Left Drive
  
  Port2: Rear Left Drive
  
@@ -18,7 +18,7 @@ Connection Guide:
  
  Port4: Intake Motor
  
- Port5: Front Left Drive  
+ Port5: Lift Motor (On Splitter)
  
  Port6: Front Right Drive
  
@@ -26,7 +26,7 @@ Connection Guide:
  
  Port8: Firing Motors (Splitterx2 + Power Expander) 
  
- Port9: LiftMotor1
+ Port9: Firing Motors 2
  
 Port10: Platform Boost system (?)
 
