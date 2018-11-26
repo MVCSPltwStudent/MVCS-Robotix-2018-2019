@@ -31,6 +31,7 @@ Port10: Platform Boost system (?)
 #define s2 "Xmtr2"
 #define STR_SIZE 10
 
+#define mabs(a1) (a1 < 0 ? -a1 : a1)
 // ----------------------------------------------IMPORTANT---------------------------------------------
 // USE SEPARATE TASKS FOR EVERYTHING. IT ACCOMPLISHES THE SAME THING AS PUTTING EVERYTHING IN MAIN,
 // BUT IT'S MORE ORGANIZED AND HELPS DEBUG
@@ -39,7 +40,7 @@ Port10: Platform Boost system (?)
 
 
 //Config
-const int adjustmentThreshhold = 0.04
+#define adjustmentThreshhold 0.04
 
 //Internal Use Variables
 int FR;
@@ -60,8 +61,45 @@ int headFlip = 1;
 bool liftOff;
 bool armOff;
 bool secondary = false;
+const char assignmentOrder[4] = {'D','L','U','R'}
 
-int rmt2(char[5] s1){
+word rmt3(char a[2]){ //takes advantage of some research on vexRT[]
+    int z = 0;
+    int b = 0;
+    switch (a[0]) {
+        case 'C':
+            if (secondary){
+                z += 6;
+            }
+            z += (a[1] - '0')-1
+            break;
+        default:
+            b = a[0] - '0';
+            if(b > 8)
+                return 0;
+            z += 14;
+            if(secondary)
+                z += 12;
+            if(b <= 6){
+                if (a[1] == 'U')
+                    ++z;
+                z += ((b-5)*2);
+            } else {
+                for(int j = 0; !( assignmentOrder[j] == a[1]|| j == 5); ++j){
+                    ++z;
+                }
+                if (j == 5)
+                    return 0;
+                z += (b-7)*4;
+            }
+            break;
+    }
+    return vexRT[z];
+}
+
+/*
+
+int rmt2(char[5] s1){   //does not work. vexRT is an array(?) that takes a special variable or an integer(?)
     char result[STR_SIZE];
     if (secondary){
         snprintf(result, sizeof(result), "%s %s", a1, s2);
@@ -72,7 +110,7 @@ int rmt2(char[5] s1){
 }
 
 
-int rmt(char[2] a){    //allow remote switching
+word rmt(char[2] a){    //allow remote switching (massive)
     switch (a [0]) {
         case '7':
             switch (a[1]) {
@@ -168,11 +206,11 @@ int rmt(char[2] a){    //allow remote switching
     return 0;
 }
 
-
+ 
 int mabs (int a) {
     return a < 0 ? -a : a;
 }
-
+*/
 
 void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     float ratios [4][2];
@@ -201,7 +239,7 @@ void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     ratios[2][0] = BLi / *lo;
     ratios[3][0] = FLi / *lo;
     wait1Msec(3);
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 5; ++i){
         ratios[0][1] = ratios[0][0] - (revFR / *loSens);
         ratios[1][1] = ratios[1][0] - (revBR / *loSens);
         ratios[2][1] = ratios[2][0] - (revBL / *loSens);
@@ -314,6 +352,7 @@ task flywheelToggle() { //detects button presses to toggle the flywheel
             motor[mFRE] = 0; //else turn off
             motor[port9] = 0;
         }
+        
         EndTimeSlice(); //tell task handler done
     }
 }
@@ -326,7 +365,7 @@ task flySpeedAdjuster() {       //Adjust the flywheel Speeds
             }
             switch(flySpeed){
             case 500:                   //if flySpeed = 500
-                flySpeed = lv1;         //set flySpeed to lv1
+                flySpeed = speed1;         //set flySpeed to lv1
                 break;
             default:                    //else
                 flySpeed = 500;         //set flyspeed to 500
