@@ -61,7 +61,7 @@ int sens;
 bool liftOff;
 bool armOff;
 bool secondary = false;
-bool liftClawControl
+bool liftClawControl;
 const char assignmentOrder[4] = {'D','L','U','R'};
 /*
 word rmt3( char a[2] ){ //takes advantage of some research on vexRT[]
@@ -290,14 +290,13 @@ task drivetrain(){ //Drivetrain Task. Joshua's code.
         motor[mBR] = BR;
         motor[mBL] = BL;
         if(vexRT[Btn8R]){                           //tests for button to flip robot head
-            while (vexRT[Btn8R]) { Wait1Msec(1);}
-            headFlip *= -1                         //flips head
+            while (vexRT[Btn8R]) { wait1Msec(1);}
+            headFlip *= -1;                         //flips head
         }
         EndTimeSlice(); //tells task handler is done
     }
 }
 
-bool remote
 task ballGrabber(){ //Ball intake system code
     while(true){
         if (vexRT[Btn6U]) { //if 6U pressed...

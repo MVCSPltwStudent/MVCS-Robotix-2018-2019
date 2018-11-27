@@ -63,19 +63,7 @@ const int removeMod = 50;
 void pre_auton()
 {
   bStopTasksBetweenModes = true;
-    wait1Msec(500);
-    turnLEDOn(configLED);
-    wait1Msec(1500);
 
-    /*------------------------------------------*/
-    /*      Insert Pre Config Options Here      */
-    /*------------------------------------------*/
-
-    liftClawControl = vexRT[btn7U] == 1
-
-
-    /*------------------------------------------*/
-    turnLEDOff(configLED);
 
     // Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
     // used by the competition include file, for example, you might want
@@ -118,5 +106,18 @@ task autonomous()
 
 task usercontrol()
 {
+	wait1Msec(500);
+    turnLEDOn(configLED);
+    wait1Msec(1500);
+
+    /*------------------------------------------*/
+    /*      Insert Pre Config Options Here      */
+    /*------------------------------------------*/
+
+    liftClawControl = vexRT[Btn7U] == 1;
+
+
+    /*------------------------------------------*/
+    turnLEDOff(configLED);
   Start();
 }
