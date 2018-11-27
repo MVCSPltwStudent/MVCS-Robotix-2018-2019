@@ -1,15 +1,17 @@
-#pragma config(Sensor, in1,    firedBallSensor, sensor)
-#pragma config(Sensor, in2,    Claw,    sensorPotentiometer)
-#pragma config(Sensor, dgtl2,  configLED,            sensorLEDtoVCC)
+#pragma config(Sensor, in1,    firedBallSensor, sensorNone)
+#pragma config(Sensor, in2,    Claw,           sensorPotentiometer)
 #pragma config(Sensor, dgtl1,  LED,            sensorLEDtoVCC)
-#pragma config(Sensor, dgtl10, BTN1,           sensorTouch)
-#pragma config(Sensor, dgtl11, BTN2,           sensorTouch)
-#pragma config(Sensor, dgtl12, BTN3,           sensorTouch)
-#pragma config(Motor,  port1,           mFL,         tmotorVex393_HBridge, openLoop)
+#pragma config(Sensor, dgtl2,  configLED,      sensorLEDtoVCC)
+#pragma config(Sensor, dgtl3,  quadLift,       sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  encFR,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  encBR,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl9,  encBL,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl11, encFL,          sensorQuadEncoder)
+#pragma config(Motor,  port1,           mFL,           tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           mBL,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           mBR,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           mGRB,          tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port5,           mLFT,           tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port5,           mLFT,          tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port6,           mFR,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           mCLW,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port8,           mFRE,          tmotorVex393HighSpeed_MC29, openLoop)
@@ -20,14 +22,14 @@
 #define flywheelSensorThreshhold 300;
 
 //Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
-#define Lifted 200;
-#define Down 60;
+const int Lifted =  200;
+const int Down  = 60;
 
 //Encoder Values for Lift Hieghts. Multiply Values by 10
-#define liftBottom 0;
-#define liftMidway 130;
-#define liftTop 200;
-#define removeMod 50;
+const int liftBottom = 0;
+const int liftMiddle = 130;
+const int liftTop = 200;
+const int removeMod = 50;
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -47,7 +49,6 @@
 #include "RoboCode-Alpha.h"
 
 
-bool liftControlMode;
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -65,14 +66,14 @@ void pre_auton()
     wait1Msec(500);
     turnLEDOn(configLED);
     wait1Msec(1500);
-    
+
     /*------------------------------------------*/
     /*      Insert Pre Config Options Here      */
     /*------------------------------------------*/
-    
-    liftControlMode = vexRT[btn7U] == 1
-    
-    
+
+    liftClawControl = vexRT[btn7U] == 1
+
+
     /*------------------------------------------*/
     turnLEDOff(configLED);
 

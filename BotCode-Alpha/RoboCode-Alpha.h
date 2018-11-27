@@ -27,7 +27,6 @@ Port10: Platform Boost system (?)
 
 */
 
-#include <string.h>
 #define s2 "Xmtr2"
 #define STR_SIZE 10
 
@@ -58,12 +57,14 @@ int revBL;
 int armTarget;
 int liftTarget;
 int headFlip = 1;
+int sens;
 bool liftOff;
 bool armOff;
 bool secondary = false;
-const char assignmentOrder[4] = {'D','L','U','R'}
-
-word rmt3(char a[2]){ //takes advantage of some research on vexRT[]
+bool liftClawControl
+const char assignmentOrder[4] = {'D','L','U','R'};
+/*
+word rmt3( char a[2] ){ //takes advantage of some research on vexRT[]
     int z = 0;
     int b = 0;
     switch (a[0]) {
@@ -114,90 +115,90 @@ word rmt(char[2] a){    //allow remote switching (massive)
     switch (a [0]) {
         case '7':
             switch (a[1]) {
-                
+
                     //Pad 7
                 case 'U':
                     return secondary ? vexRT[Btn7UXmtr2] : vexRT[Btn7U];
                     break;
-                    
+
                 case 'D':
                     return secondary ? vexRT[Btn7DXmtr2] : vexRT[Btn7D];
                     break;
-            
+
                 case 'L':
                     return secondary ? vexRT[Btn7LXmtr2] : vexRT[Btn7L];
                     break;
-            
+
                 case 'R':
                     return secondary ? vexRT[Btn7RXmtr2] : vexRT[Btn7R];
                     break;
             }
             break;
-            
+
         case '8':
             switch(a[1]){
                     //Pad 8
                 case 'U':
                     return secondary ? vexRT[Btn8UXmtr2] : vexRT[Btn8U];
                     break;
-            
+
                 case 'D':
                     return secondary ? vexRT[Btn8DXmtr2] : vexRT[Btn8D];
                     break;
-            
+
                 case 'L':
                     return secondary ? vexRT[Btn8LXmtr2] : vexRT[Btn8L];
                     break;
-            
+
                 case 'R':
                     return secondary ? vexRT[Btn8RXmtr2] : vexRT[Btn8R];
                     break;
             }
             break;
-            
+
         case '6':
             switch(a[1]){
                     //triggers 6
                 case 'U':
                     return secondary ? vexRT[Btn6UXmtr2] : vexRT[Btn6U];
                     break;
-            
+
                 case 'D':
                     return secondary ? vexRT[Btn6DXmtr2] : vexRT[Btn6D];
                     break;
             }
             break;
-            
+
         case '5':
             switch(a[1]){
-            
+
                     //triggers 5
                 case 'U':
                     return secondary ? vexRT[Btn5UXmtr2] : vexRT[Btn5U];
                     break;
-            
+
                 case 'D':
                     return secondary ? vexRT[Btn5DXmtr2] : vexRT[Btn5D];
                     break;
             }
             break;
-            
+
         case 'C':
             switch(a[1]){
-        
+
                     //joystick channels
                 case '1':
                     return secondary ? vexRT[Ch1Xmtr2] : vexRT[Ch1];
                     break;
-        
+
                 case '2':
                     return secondary ? vexRT[Ch2Xmtr2] : vexRT[Ch2];
                     break;
-            
+
                 case '3':
                     return secondary ? vexRT[Ch3Xmtr2] : vexRT[Ch3];
                     break;
-            
+
                 case '4':
                     return secondary ? vexRT[Ch4Xmtr2] : vexRT[Ch4];
                     break;
@@ -206,7 +207,7 @@ word rmt(char[2] a){    //allow remote switching (massive)
     return 0;
 }
 
- 
+
 int mabs (int a) {
     return a < 0 ? -a : a;
 }
@@ -352,7 +353,7 @@ task flywheelToggle() { //detects button presses to toggle the flywheel
             motor[mFRE] = 0; //else turn off
             motor[port9] = 0;
         }
-        
+
         EndTimeSlice(); //tell task handler done
     }
 }
@@ -423,7 +424,7 @@ task clawControl(){  //basic motor control by 2 buttons
 	}
 }
 task autoClaw(){  //handle Claw Movement
-    
+
     armTarget = SensorValue[Claw]/10;  //set target to current position to prevent early movement
     while (true) {
         sens = SensorValue[Claw]/10;    //determine current claw position
@@ -436,7 +437,7 @@ task autoClaw(){  //handle Claw Movement
         } else {                        //if the current position is not off
             motor[mCLW] = 0;            //stop the claw
         }
-        
+
         EndTimeSlice(); //tell task handler done
     }
 }
@@ -456,7 +457,7 @@ task autoLift(){ //Task to move Lift into postition
         } else {                                //else (lift is not off the target by at least 50)
             motor[mLFT] = 0;                    //stop the lift
         }
-        
+
         EndTimeSlice();            //tell task handler done
     }
 }
@@ -467,28 +468,28 @@ task liftClawControllerInterface(){
     startTask(autoClaw);
     while (true) {
         if (vexRT[Btn7D]) {                         //if button for lift pressed
-            while (vexRT[Btn7D]) {wait1Msec();}     //wait until button un-pressed
+            while (vexRT[Btn7D]) {wait1Msec(1);}     //wait until button un-pressed
             switch (liftTarget) {                   //switch case:
                 case liftBottom:                    //if target is set to bottom
                     liftTarget = liftMiddle;        //set target to middle
                     break;
-                    
+
                 case liftMiddle:                    //if target set to middle
                     liftTarget = liftTop;           //set target to top
                     break;
-                    
+
                 default:                            //else
                     liftTarget = liftBottom;        //set target to bottom
                     break;
             }
         }
         if (vexRT[Btn7L]) {                         //if button for claw pressed
-            while (vexRT[Btn7L]) {wait1Msec();}     //wait until un-pressed
+            while (vexRT[Btn7L]) {wait1Msec(1);}     //wait until un-pressed
             switch (armTarget) {                    //switch case:
                 case Down:                          //if target is set to down position
                     armTarget = Lifted;             //set target to lifted position
                     break;
-                    
+
                 default:                            //else
                     armTarget = Down;               //set target to down position
                     wait1Msec(500);
