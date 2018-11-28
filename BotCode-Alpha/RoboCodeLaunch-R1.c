@@ -22,7 +22,6 @@
 #define flywheelSensorThreshhold 300
 
 //Potentiometer Positions for Cascade Lift Arm. Multiply Values by 10
-#define Stowed
 #define Lifted 200
 #define Down  60
 

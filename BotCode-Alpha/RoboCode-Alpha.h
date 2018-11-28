@@ -61,7 +61,7 @@ bool liftClawControl;
 bool armOff;
 const char assignmentOrder[4] = {'D','L','U','R'};
 
-word rmt(char *a){ //takes advantage of some research on vexRT[]
+int rmt(char *a){ //takes advantage of some research on vexRT[]
     int z = 0;
     int b = 0;
     int j;
@@ -96,120 +96,7 @@ word rmt(char *a){ //takes advantage of some research on vexRT[]
     return vexRT[z];
 }
 
-/*
 
-int rmt2(char[5] s1){   //does not work. vexRT is an array(?) that takes a special variable or an integer(?)
-    char result[STR_SIZE];
-    if (secondary){
-        snprintf(result, sizeof(result), "%s %s", a1, s2);
-    } else {
-        result[] = s1[];
-    }
-    return vexRT[result];
-}
-
-
-word rmt(char[2] a){    //allow remote switching (massive)
-    switch (a [0]) {
-        case '7':
-            switch (a[1]) {
-
-                    //Pad 7
-                case 'U':
-                    return secondary ? vexRT[Btn7UXmtr2] : vexRT[Btn7U];
-                    break;
-
-                case 'D':
-                    return secondary ? vexRT[Btn7DXmtr2] : vexRT[Btn7D];
-                    break;
-
-                case 'L':
-                    return secondary ? vexRT[Btn7LXmtr2] : vexRT[Btn7L];
-                    break;
-
-                case 'R':
-                    return secondary ? vexRT[Btn7RXmtr2] : vexRT[Btn7R];
-                    break;
-            }
-            break;
-
-        case '8':
-            switch(a[1]){
-                    //Pad 8
-                case 'U':
-                    return secondary ? vexRT[Btn8UXmtr2] : vexRT[Btn8U];
-                    break;
-
-                case 'D':
-                    return secondary ? vexRT[Btn8DXmtr2] : vexRT[Btn8D];
-                    break;
-
-                case 'L':
-                    return secondary ? vexRT[Btn8LXmtr2] : vexRT[Btn8L];
-                    break;
-
-                case 'R':
-                    return secondary ? vexRT[Btn8RXmtr2] : vexRT[Btn8R];
-                    break;
-            }
-            break;
-
-        case '6':
-            switch(a[1]){
-                    //triggers 6
-                case 'U':
-                    return secondary ? vexRT[Btn6UXmtr2] : vexRT[Btn6U];
-                    break;
-
-                case 'D':
-                    return secondary ? vexRT[Btn6DXmtr2] : vexRT[Btn6D];
-                    break;
-            }
-            break;
-
-        case '5':
-            switch(a[1]){
-
-                    //triggers 5
-                case 'U':
-                    return secondary ? vexRT[Btn5UXmtr2] : vexRT[Btn5U];
-                    break;
-
-                case 'D':
-                    return secondary ? vexRT[Btn5DXmtr2] : vexRT[Btn5D];
-                    break;
-            }
-            break;
-
-        case 'C':
-            switch(a[1]){
-
-                    //joystick channels
-                case '1':
-                    return secondary ? vexRT[Ch1Xmtr2] : vexRT[Ch1];
-                    break;
-
-                case '2':
-                    return secondary ? vexRT[Ch2Xmtr2] : vexRT[Ch2];
-                    break;
-
-                case '3':
-                    return secondary ? vexRT[Ch3Xmtr2] : vexRT[Ch3];
-                    break;
-
-                case '4':
-                    return secondary ? vexRT[Ch4Xmtr2] : vexRT[Ch4];
-                    break;
-            }
-    }
-    return 0;
-}
-
-
-int mabs (int a) {
-    return a < 0 ? -a : a;
-}
-*/
 
 void applyMotorSpeed(int FRi, int BRi, int BLi, int FLi){
     float ratios [4][2];
@@ -306,6 +193,8 @@ task ballGrabber(){ //Ball intake system code
         EndTimeSlice(); //tell task handler done
     }
 }
+
+
 task LEDControl(){      //task to turn LED on & off
     while(true){
         if(flySpeed < 127){                 //if flywheel is in secondary state
@@ -354,6 +243,7 @@ task flywheelToggle() { //detects button presses to toggle the flywheel
     }
 }
 
+
 task flySpeedAdjuster() {       //Adjust the flywheel Speeds
     while(true){
         if (secondarySpeed) {             //if 8L pressed
@@ -380,6 +270,8 @@ task flySpeedAdjuster() {       //Adjust the flywheel Speeds
         }
     }
 }
+
+
 task RPMTrack(){
 	int FRi,FLi,BRi,BLi;
 	while(true){
@@ -394,6 +286,7 @@ task RPMTrack(){
 		revBR = 500*(BR - SensorValue[encBR]);
 	}
 }
+
 
 task cascadeClawManual(){  //control cascade lift and claw manually
 	while(true){
@@ -420,6 +313,8 @@ task cascadeClawManual(){  //control cascade lift and claw manually
 		EndTimeSlice();
 	}
 }
+
+
 task autoClaw(){  //handle Claw Movement
 
     armTarget = SensorValue[Claw]/10;  //set target to current position to prevent early movement
@@ -439,6 +334,8 @@ task autoClaw(){  //handle Claw Movement
         EndTimeSlice(); //tell task handler done
     }
 }
+
+
 task autoLift(){ //Task to move Lift into postition
     int sensLift;
     SensorValue[quadLift] = 0;                  //initialize the quad encoder to 0;
@@ -459,6 +356,7 @@ task autoLift(){ //Task to move Lift into postition
         EndTimeSlice();            //tell task handler done
     }
 }
+
 
 task liftClawInterfaceSimple(){
     while (true) {
@@ -488,6 +386,8 @@ task liftClawInterfaceSimple(){
         EndTimeSlice();
     }
 }
+
+
 task liftClawControllerInterface(){
     startTask(autoLift);  //ensure position monitors already running
     startTask(autoClaw);
@@ -551,8 +451,12 @@ void Start()
         startTask(liftClawControllerInterface);
     } else {
         startTask(liftClawInterfaceSimple);
+    }
     startTask(cascadeClawManual);
 	startTask(autoLift);
 	startTask(autoClaw);
 	startTask(LEDControl);
+    if( nVexRCReceiveState & 0x02 ){
+        startTask(controllerSwitch);
+    }
 }
