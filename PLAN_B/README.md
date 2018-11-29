@@ -1,4 +1,6 @@
 ## Plan B
-This is an alternative to Tristan's code.
 
-# <span style="color:red">Please DO NOT touch.</span>
+8U: Set flyWheel full speed
+8L: Set flyWheel half speed
+8D: Set flyWheel zero speed (turn off)
+*there is no flyWheel toggle button
