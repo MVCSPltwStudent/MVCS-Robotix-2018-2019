@@ -26,7 +26,9 @@ Port9: LiftMotor1
 Port10: Platform Boost system (?)
 
 */
-#define mabs(a1) (a1 < 0 ? -a1 : a1)
+int mabs(int a1) {
+    return (a1 < 0 ? -a1 : a1);
+}
 // ----------------------------------------------IMPORTANT---------------------------------------------
 // USE SEPARATE TASKS FOR EVERYTHING. IT ACCOMPLISHES THE SAME THING AS PUTTING EVERYTHING IN MAIN,
 // BUT IT'S MORE ORGANIZED AND HELPS DEBUG
@@ -293,22 +295,22 @@ task cascadeClawManual(){  //control cascade lift and claw manually
 		if(cascadeU){
             cascadeTarget = liftTop;
             while (cascadeU) {wait1Msec(1);}
-            cascadeTarget = SensorValue[quadLift]/10
+            cascadeTarget = SensorValue[quadLift]/10;
 		}
         if(cascadeD){
             cascadeTarget = liftBottom;
             while (cascadeD) {wait1Msec(1);}
-            cascadeTarget = SensorValue[quadLift]/10
+            cascadeTarget = SensorValue[quadLift]/10;
         }
         if(clawU){
             clawTarget = Lifted;
             while (cascadeU) {wait1Msec(1);}
-            cascadeTarget = SensorValue[Claw]/10
+            cascadeTarget = SensorValue[Claw]/10;
         }
         if(clawD){
             clawTarget = Stowed;
             while (clawD) {wait1Msec(1);}
-            clawTarget = SensorValue[Claw]/10
+            clawTarget = SensorValue[Claw]/10;
         }
 		EndTimeSlice();
 	}
@@ -316,16 +318,19 @@ task cascadeClawManual(){  //control cascade lift and claw manually
 
 
 task autoClaw(){  //handle Claw Movement
-
+    int diff;
+    int movMod;
     armTarget = SensorValue[Claw]/10;  //set target to current position to prevent early movement
     while (true) {
         sens = SensorValue[Claw]/10;    //determine current claw position
-        armOff = mabs(sens-armTarget) > 1
+        diff = mabs(sens-armTarget);
+        armOff = diff > 10;
         if(armOff){   // if the current position is off of the target by at least 10
+            movMod = diff > 50 ? 127 : diff*2.54;
             if (sens > armTarget) {     //if the position is higher than the target
-                motor[mCLW] = -127;     //set motor to go down
+                motor[mCLW] =  -movMod;     //set motor to go down
             } else {                    //else
-                motor[mCLW] = 127;      //set motor to go up
+                motor[mCLW] = movMod;      //set motor to go up
             }
         } else {                        //if the current position is not off
             motor[mCLW] = 0;            //stop the claw
@@ -375,7 +380,7 @@ task liftClawInterfaceSimple(){
             }
         }
         if(cascadeDown){
-            liftTarget = liftBottom
+            liftTarget = liftBottom;
         }
         if(groundFlip){
             while(groundFlip){wait1MSec(1);}
