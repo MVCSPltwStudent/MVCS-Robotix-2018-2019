@@ -204,8 +204,8 @@ task drive() {
 			}
 
 		}
-		if (vexRT[Btn8R]) {
-    	while (vexRT[Btn8R]) { wait1Msec(10);}
+		if (vexRT[Btn7L]) { // flip head
+    	while (vexRT[Btn7L]) { wait1Msec(10);}
       headFlip = -1;
     }
 		// Make sure at least one of the motors is running at full spead
